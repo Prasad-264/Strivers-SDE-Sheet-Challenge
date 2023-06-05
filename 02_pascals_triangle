@@ -1,0 +1,36 @@
+#include <bits/stdc++.h> 
+
+vector<long long int> getrow(int n) {
+    long long ans = 1;
+    vector<long long int> row;
+    row.push_back(1);
+
+    for(int i=1; i<n; i++) {
+        ans = ans * (n - i);
+        ans = ans / i;
+        row.push_back(ans);
+    }
+    return row;
+}
+
+vector<vector<long long int>> printPascal(int n) {
+
+    // Brute Force
+    /*
+    vector<vector<long long int>> r(n);
+    for(int i=0; i<n; i++) {
+        r[i].resize(i+1);
+        r[i][0] = r[i][i] = 1;
+        for(int j=1; j<i; j++) {
+            r[i][j] = r[i-1][j-1] + r[i-1][j];
+        }
+    }
+    return r;
+    */
+
+    vector<vector<long long int>> ans;
+    for(int i=1; i<=n; i++) {
+        ans.push_back(getrow(i));
+    }
+    return ans;
+}
