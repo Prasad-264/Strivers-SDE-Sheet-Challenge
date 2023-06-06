@@ -1,4 +1,40 @@
 #include <bits/stdc++.h> 
+vector<int> nextPermutation(vector<int> &permutation, int n) {
+
+    // Using C++ STL
+    // next_permutation(permutation.begin(), permutation.end());
+    // return permutation;
+
+
+    // Find the break point (longest prefix)
+    int ind = -1;
+    for(int i=n-2; i>=0; i--) {
+        if(permutation[i] < permutation[i+1]) {
+            ind = i;
+            break;
+        }
+    }
+
+    // if no break point found just return the reverse array
+    if(ind == -1) {
+        reverse(permutation.begin(), permutation.end());
+        return permutation;
+    }
+
+    // find the just greater element than the break point element and swap with it
+    for(int i=n-1; i>ind; i--) {
+        if(permutation[i] > permutation[ind]) {
+            swap(permutation[i], permutation[ind]);
+            break;
+        }
+    }
+
+    // finally reverse the array from the break point
+    reverse(permutation.begin() + ind + 1, permutation.end());
+    return permutation;
+}
+
+#include <bits/stdc++.h> 
 vector<int> nextPermutation(vector<int>& nums, int n) {
     vector<int> ans(nums);
     int i = n-2;
