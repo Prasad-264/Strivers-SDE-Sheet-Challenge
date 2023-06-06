@@ -1,0 +1,14 @@
+#include <bits/stdc++.h> 
+vector<int> nextPermutation(vector<int>& nums, int n) {
+    vector<int> ans(nums);
+    int i = n-2;
+    while(i >= 0 && ans[i+1] <= ans[i]) i--;
+
+    if(i >= 0) {
+        int j = n-1;
+        while(ans[j] <= ans[i]) j--;
+        swap(ans[i], ans[j]);
+    }
+    reverse(ans.begin()+i+1, ans.end());
+    return ans;
+}
