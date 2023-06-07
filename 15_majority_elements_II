@@ -1,0 +1,58 @@
+// Find the Majority Element that occurs more than N/3 times
+// at max only 2 possible elements will be ans
+
+// Hashing Approach
+
+#include <bits/stdc++.h>
+
+vector<int> majorityElementII(vector<int> &arr) {
+    unordered_map<int, int> mp;
+    for(auto it : arr) {
+        mp[it]++;
+    }
+    vector<int> ans;
+    int num = arr.size() / 3;
+    for(auto it : mp) {
+        if(it.second > num) ans.push_back(it.first);
+    }
+    return ans;
+}
+
+// Optimal Solution - Moore's algorithm
+
+#include <bits/stdc++.h>
+
+vector<int> majorityElementII(vector<int> &arr) {
+    int n = arr.size();
+
+    int ele1, ele2;
+    int cnt1 = 0, cnt2 = 0;
+    for(int i=0; i<n; i++) {
+        if (cnt1 == 0 && arr[i] != ele2) {
+            cnt1 = 1;
+            ele1 = arr[i];
+        } 
+        else if(cnt2 == 0 && arr[i] != ele1) {
+            cnt2 = 1;
+            ele2 = arr[i];
+        }
+        else if(ele1 == arr[i]) cnt1++;
+        else if(ele2 == arr[i]) cnt2++;
+        else {
+            cnt1--, cnt2--;
+        }
+    }
+    vector<int> ls;
+    cnt1 = 0, cnt2 = 0;
+    for(int i=0; i<n; i++) {
+        if(ele1 == arr[i]) cnt1++;
+        if(ele2 == arr[i]) cnt2++;
+    }
+    
+    int mini = (int)n/3;
+    if(cnt1 > mini) ls.push_back(ele1);
+    if(cnt2 > mini) ls.push_back(ele2);
+    return ls;
+}
+
+// TC - O(2N)
