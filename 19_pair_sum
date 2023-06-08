@@ -1,0 +1,42 @@
+// Two sum
+
+#include <bits/stdc++.h>
+
+vector<vector<int>> pairSum(vector<int> &arr, int s) {
+   int n = arr.size();
+   vector<vector<int>> ans;
+
+   for(int i=0; i<n; i++) {
+      for(int j=i+1; j<n; j++) {
+         if(arr[i] + arr[j] == s) {
+            int a = min(arr[i], arr[j]);
+            int b = max(arr[i], arr[j]);
+            ans.push_back({a, b});
+         }
+      }
+   }
+   sort(ans.begin(), ans.end());
+
+   return ans;
+}
+
+// TC - O(n^2)
+
+// Leetcode
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> ans;
+        unordered_map<int,int> mp;
+        for (int i=0;i<nums.size();i++){
+            int idx = target - nums[i];
+            if (mp.find(idx) != mp.end() ){
+                ans={i, mp[idx]}; 
+                return ans;
+            }
+            mp[nums[i]] = i;
+        }
+        return ans;
+    }
+};
