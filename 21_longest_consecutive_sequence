@@ -1,0 +1,46 @@
+// Brute force
+
+#include <bits/stdc++.h>
+
+int lengthOfLongestConsecutiveSequence(vector<int> &arr, int n) {
+    sort(arr.begin(), arr.end());
+    int maxi = 1;
+    int cnt = 1;
+    int prev = arr[0];
+
+    for(int i=1; i<n; i++) {
+        if(arr[i] == prev+1) {
+            cnt++;
+        }
+        else if(arr[i] != prev) {
+            cnt = 1;
+        }
+        prev = arr[i];
+        maxi = max(maxi, cnt);
+    }
+    return maxi;
+}
+
+
+// Optimal Approach
+
+#include <bits/stdc++.h>
+
+int lengthOfLongestConsecutiveSequence(vector<int> &arr, int n) {
+    set<int> s(arr.begin(), arr.end());
+    int maxi = 0;
+    for(auto it : arr) {
+        if(!s.count(it - 1)) {
+            int curnum = it;
+            int cnt = 1;
+
+            while(s.count(curnum+1)) {
+                curnum++;
+                cnt++;
+            }
+
+            maxi = max(maxi, cnt);
+        }
+    }
+    return maxi;
+}
