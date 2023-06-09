@@ -1,0 +1,55 @@
+// Brute force
+
+#include <bits/stdc++.h>
+
+string fourSum(vector<int> arr, int target, int n) {
+    for(int i=0; i<n; i++) {
+        for(int j=i+1; j<n; j++) {
+            set<int> s;
+            for(int k=j+1; k<n; k++) {
+                int sum = arr[i] + arr[j] + arr[k];
+                int num = target - sum;
+                if(s.find(num) != s.end()) {
+                    return "Yes";
+                }
+                s.insert(arr[k]);
+            }
+        }
+    }
+    return "No";
+}
+
+// Optimal solution
+
+#include <bits/stdc++.h>
+
+string fourSum(vector<int> arr, int target, int n) {
+    sort(arr.begin(), arr.end());
+
+    for(int i=0; i<n; i++) {
+        if(i > 0 && arr[i-1] == arr[i]) continue;
+        for(int j=i+1; j<n; j++) {
+            if(i != j && arr[j-1] == arr[j]) continue;
+
+            int sum = arr[i] + arr[j];
+            int t = target - sum;
+
+            int k = j+1;
+            int l = n-1;
+
+            while(k < l) {
+                int add = arr[k] + arr[l];
+                if (add == t) {
+                    return "Yes";
+                    // while(k < l && arr[k] != arr[k-1]) k++;
+                    // while(k < l && arr[l] != arr[l+1]) l--;
+                } 
+                else if (add > t) l--;
+                else k++;
+            }
+        }
+    }
+    return "No";
+}
+
+// O(n^3)
