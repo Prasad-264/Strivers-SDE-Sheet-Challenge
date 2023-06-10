@@ -1,0 +1,15 @@
+// Optimal Approach
+
+LinkedListNode<int> *reverseLinkedList(LinkedListNode<int> *head) {
+    LinkedListNode<int> *cur = head;
+    LinkedListNode<int> *prev = NULL;
+    LinkedListNode<int> *temp = NULL;
+
+    while(cur != NULL) {
+        temp = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = temp;
+    }
+    return prev;
+}
