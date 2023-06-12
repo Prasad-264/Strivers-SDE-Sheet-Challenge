@@ -1,0 +1,40 @@
+// Slow and fast pointer
+
+Node *firstNode(Node *head) {
+    Node* slow = head;
+    Node* fast = head;
+
+    bool flag = false;
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if(slow == fast) {
+            flag = true;
+            break;
+        }
+    }
+
+    slow = head;
+    if(flag) {
+        while(slow != fast) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+        return slow;        
+    }
+    return NULL;
+}
+
+
+// Hashing
+
+node* detectCycle(node* head) {
+    unordered_set<node*> st;
+    while(head != NULL) {
+        if(st.find(head) != st.end()) return head;
+        st.insert(head);
+        head = head->next;
+    }
+    return NULL;
+}
