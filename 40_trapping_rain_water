@@ -1,0 +1,75 @@
+// using extra space solution
+
+#include <bits/stdc++.h> 
+long getTrappedWater(long *arr, int n) {
+    vector<long> lmax(n, 0), rmax(n, 0);
+    long lmaxi = 0;
+    for(long i=0; i<n; i++) {
+        lmaxi = max(lmaxi, arr[i]);
+        lmax[i] = lmaxi;
+    }
+    long rmaxi = 0;
+    for(long i=n-1; i>=0; i--) {
+        rmaxi = max(rmaxi, arr[i]);
+        rmax[i] = rmaxi; 
+    }
+
+    long ans = 0;
+    for(long i=1; i<n-1; i++) {
+        ans = ans + min(lmax[i], rmax[i]) - arr[i];
+    }
+    return ans;
+}
+
+
+// computing leftmax and rightmax at each index
+
+int trap(vector < int > & arr) {
+    int n = arr.size();
+    int waterTrapped = 0;
+    for (int i = 0; i < n; i++) {
+        int j = i;
+        int leftMax = 0, rightMax = 0;
+        while (j >= 0) {
+            leftMax = max(leftMax, arr[j]);
+            j--;
+        }
+        j = i;
+        while (j < n) {
+            rightMax = max(rightMax, arr[j]);
+            j++;
+        }
+        waterTrapped += min(leftMax, rightMax) - arr[i];
+    }
+    return waterTrapped;
+}
+
+
+// Optimised Approach = two Pointers
+
+long getTrappedWater(long *arr, int n) {
+    long l = 0, r = n-1;
+    long lmax = 0, rmax = 0;
+    long ans = 0;
+    while(l <= r) {
+        if(arr[l] <= arr[r]) {
+            if(arr[l] > lmax) {
+                lmax = arr[l];
+            }
+            else {
+                ans += lmax - arr[l];
+            }
+            l++;
+        }
+        else {
+            if(arr[r] > rmax) {
+                rmax = arr[r];
+            }
+            else {
+                ans += rmax - arr[r];
+            }
+            r--;
+        }
+    }
+    return ans;
+}
