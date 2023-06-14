@@ -1,0 +1,73 @@
+// Sorting with end time
+
+#include <bits/stdc++.h> 
+bool static comp(struct pair<pair<int, int>, int> m1, pair<pair<int, int>, int> m2) {
+    if (m1.first.first < m2.first.first) return true;
+    else if (m1.first.first > m2.first.first) return false;
+    else if (m1.second < m2.second) return true;
+    return false;
+}
+vector<int> maximumMeetings(vector<int> &start, vector<int> &end) {
+    int n = start.size();
+    vector<pair< pair<int, int>, int >> arr;
+    for(int i=0; i<n; i++) {
+        arr.push_back({{end[i], start[i]}, i+1});
+    }
+    sort(arr.begin(), arr.end(), comp);
+    vector<int> ans;
+    int limit = arr[0].first.first;
+    ans.push_back(arr[0].second);
+    for(int i=1; i<n; i++) {
+        int stime = arr[i].first.second;
+        if(stime > limit) {
+            limit = arr[i].first.first;
+            ans.push_back(arr[i].second);
+        }
+    }
+    return ans;
+}
+
+// Same code using class structure
+
+struct meeting {
+   int start;
+   int end;
+   int pos;
+};
+
+class Solution {
+   public:
+      bool static comparator(struct meeting m1, meeting m2) {
+         if (m1.end < m2.end) return true;
+         else if (m1.end > m2.end) return false;
+         else if (m1.pos < m2.pos) return true;
+         return false;
+      }
+   void maxMeetings(int s[], int e[], int n) {
+      struct meeting meet[n];
+      for (int i = 0; i < n; i++) {
+         meet[i].start = s[i], meet[i].end = e[i], meet[i].pos = i + 1;
+      }
+
+      sort(meet, meet + n, comparator);
+
+      vector < int > answer;
+
+      int limit = meet[0].end;
+      answer.push_back(meet[0].pos);
+
+      for (int i = 1; i < n; i++) {
+         if (meet[i].start > limit) {
+            limit = meet[i].end;
+            answer.push_back(meet[i].pos);
+         }
+      }
+      cout<<"The order in which the meetings will be performed is "<<endl;
+      for (int i = 0; i < answer.size(); i++) {
+         cout << answer[i] << " ";
+      }
+
+   }
+
+};
+
