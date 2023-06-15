@@ -1,0 +1,18 @@
+// Recursion
+
+#include <bits/stdc++.h> 
+void fun(int ind, int sum, vector<int>& num, vector<int> &ans){
+    if(ind >= num.size()) {
+        ans.push_back(sum);
+        return;
+    }
+    fun(ind + 1, sum + num[ind], num, ans);
+    fun(ind + 1, sum, num, ans);
+}
+vector<int> subsetSum(vector<int> &num) {
+    vector<int> ans;
+    int sum = 0;
+    fun(0, sum, num, ans);
+    sort(ans.begin(), ans.end());
+    return ans;
+}
