@@ -1,0 +1,20 @@
+#include <bits/stdc++.h>
+int maximumActivities(vector<int> &start, vector<int> &finish) {
+    int n = start.size();
+    vector<pair<int, int>> arr;
+    for(int i=0; i<n; i++) {
+        arr.push_back({finish[i], start[i]});
+    }
+    sort(arr.begin(), arr.end());
+
+    int cnt = 1;
+    int ft = arr[0].first;
+    for(int i=1; i<n; i++) {
+        int st = arr[i].second;
+        if(ft <= st) {
+            cnt++;
+            ft = arr[i].first;
+        }
+    }
+    return cnt;
+}
