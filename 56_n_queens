@@ -1,0 +1,99 @@
+
+// Approach 1
+
+bool isSafe(int row, int col, vector<vector<int>>& board, int n) {
+    int drow = row;
+    int dcol = col;
+
+    // upper diagonal
+    while(row >= 0 && col >= 0) {
+        if (board[row][col] == 1) return false;
+        row--;
+        col--;
+    }
+
+    // horizontal row
+    col = dcol;
+    row = drow;
+    while (col >= 0) {
+        if (board[row][col] == 1) return false;
+        col--;
+    }
+
+    // lower diagonal
+    row = drow;
+    col = dcol;
+    while (row < n && col >= 0) {
+        if (board[row][col] == 1) return false;
+        row++;
+        col--;
+    }
+    return true;
+}
+
+void solve(int col, int n, vector<vector<int>>& board, vector<vector<int>>& ans) {
+    if(col >= n) {
+        vector<int> temp;
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<n; j++) {
+                temp.push_back(board[i][j]);
+            }
+        }
+        ans.push_back(temp);
+        return;
+    }
+    for(int row=0; row<n; row++) {
+        if(isSafe(row, col, board, n)) {
+            board[row][col] = 1;
+            solve(col+1, n, board, ans);
+            board[row][col] = 0;
+        }
+    }
+}
+
+vector<vector<int>> solveNQueens(int n) {
+    vector<vector<int>> ans;
+    vector<vector<int>> board(n, vector<int> (n, 0));
+    solve(0, n, board, ans);
+    return ans;
+}
+
+
+
+// Approach 2
+
+void solve(int col, int n, vector<vector<int>>& board, vector<int>& leftrow, 
+vector<int>& lowerd, vector<int>& upperd, vector<vector<int>>& ans) {
+    if(col >= n) {
+        vector<int> temp;
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<n; j++) {
+                temp.push_back(board[i][j]);
+            }
+        }
+        ans.push_back(temp);
+        return;
+    }
+    for(int row=0; row<n; row++) {
+        if(leftrow[row] == 0 && lowerd[row+col] == 0 && upperd[n-1 + col-row] == 0) {
+            board[row][col] = 1;
+            leftrow[row] = 1;
+            lowerd[row+col] = 1;
+            upperd[n-1 + col-row] = 1;
+            solve(col+1, n, board, leftrow, lowerd, upperd, ans);
+            board[row][col] = 0;
+            leftrow[row] = 0;
+            lowerd[row+col] = 0;
+            upperd[n-1 + col-row] = 0;
+        }
+    }
+}
+
+vector<vector<int>> solveNQueens(int n) {
+    vector<vector<int>> ans;
+    vector<vector<int>> board(n, vector<int> (n, 0));
+
+    vector<int> leftrow(n, 0), lowerd(2*n-1, 0), upperd(2*n-1, 0);
+    solve(0, n, board, leftrow, lowerd, upperd, ans);
+    return ans;
+}
