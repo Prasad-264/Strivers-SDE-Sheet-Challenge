@@ -1,0 +1,22 @@
+// Recursion + Backtracking
+
+#include <bits/stdc++.h>
+
+void permutation(int ind, string& s, vector<string>& ans) {
+    if(ind == s.size()) {
+        ans.push_back(s);
+        return;
+    }
+    for(int i=ind; i<s.size(); i++) {
+        swap(s[i], s[ind]);
+        permutation(ind+1, s, ans);
+        swap(s[i], s[ind]);
+    }
+}
+
+vector<string> findPermutations(string &s) {
+    vector<string> ans;
+    permutation(0, s, ans);
+    sort(ans.begin(), ans.end());
+    return ans;
+}
