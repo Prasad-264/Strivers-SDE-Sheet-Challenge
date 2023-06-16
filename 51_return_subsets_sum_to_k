@@ -1,0 +1,25 @@
+void sumtok(int ind, int sum, int k, vector<int>& arr, vector<int>& ds, vector<vector<int>>& ans) {
+    if(ind == arr.size()) {
+        if(sum == k) {
+            ans.push_back(ds);
+            return;
+        }
+        return;
+    }
+
+    // pick element
+    ds.push_back(arr[ind]);
+    sumtok(ind+1, sum + arr[ind], k, arr, ds, ans);
+    ds.pop_back();
+
+    // not pick;
+    sumtok(ind+1, sum, k, arr, ds, ans);
+}
+
+vector<vector<int>> findSubsetsThatSumToK(vector<int> arr, int n, int k) {
+    vector<vector<int>> ans;
+    vector<int> ds;
+    int sum = 0;
+    sumtok(0, sum, k, arr, ds, ans);
+    return ans;
+}
