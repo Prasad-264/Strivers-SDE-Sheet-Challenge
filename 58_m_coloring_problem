@@ -8,7 +8,6 @@ bool isPossible(vector<vector<int>> &mat, int node, vector<int>& color, int col,
             }
         }
     }
-    color[node] = col;
     return true;
 }
 
@@ -18,6 +17,7 @@ bool solve(int node, int n, int m, vector<int>& color, vector<vector<int>> &mat)
     }
     for(int i=1; i<=m; i++) {
         if(isPossible(mat, node, color, i, n)) {
+            color[node] = i;
             if(solve(node+1, n, m, color, mat)) {
                 return true;
             }
