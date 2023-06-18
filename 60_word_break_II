@@ -1,0 +1,34 @@
+// Same as Palindrome Partitioning
+
+#include <bits/stdc++.h> 
+void fun(int ind, vector<string>& ds, string& s, unordered_map<string, int>& mp, vector<string> &ans) {
+    if(ind == s.size()) {
+        string temp = "";
+        for(auto it : ds) {
+            temp += it + " ";
+        }
+        ans.push_back(temp);
+        return;
+    }
+
+    for(int i=ind; i<s.size(); i++) {
+        string tempstr = s.substr(ind, i-ind+1);
+        if(mp.find(tempstr) != mp.end()) {
+            ds.push_back(tempstr);
+            fun(i+1, ds, s, mp, ans);
+            ds.pop_back();
+        }
+    }
+}
+
+vector<string> wordBreak(string &s, vector<string> &dictionary) {
+    unordered_map<string, int> mp;
+    for(auto it : dictionary) {
+        mp[it]++;
+    }
+    vector<string> ans;
+    vector<string> ds;
+    fun(0, ds, s, mp, ans);
+    return ans;    
+}
+
