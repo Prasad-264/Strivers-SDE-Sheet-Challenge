@@ -1,0 +1,35 @@
+#include <bits/stdc++.h> 
+vector<int> dir = {1, 0, -1, 0, 1};
+void fun(int i, int j, vector<vector<int>>& maze, vector<vector<int>>& ans, int n) {
+    if(i == n-1 && j == n-1) {
+        vector<int> temp;
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<n; j++) {
+                if(maze[i][j] == 2) {
+                    temp.push_back(1);
+                }
+                else {
+                    temp.push_back(0);
+                }
+            }
+        }
+        ans.push_back(temp);
+        return;
+    }
+
+    for(int k=0; k<4; k++) {
+        int x = i + dir[k];
+        int y = j + dir[k+1];
+        if(x >= 0 && x < n && y >= 0 && y < n && maze[x][y] == 1) {
+            maze[x][y] = 2;
+            fun(x, y, maze, ans, n);
+            maze[x][y] = 1;
+        }
+    }
+}
+vector<vector<int> > ratInAMaze(vector<vector<int>>& maze, int n) {
+    vector<vector<int>> ans;
+    maze[0][0] = 2;
+    fun(0, 0, maze, ans, n);
+    return ans;
+}
