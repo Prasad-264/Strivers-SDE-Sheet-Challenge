@@ -1,5 +1,3 @@
-// Single Element in a Sorted Array
-
 // Brute force - Xor
 int singleNonDuplicate(vector<int>& arr) {
 	int n = arr.size();
