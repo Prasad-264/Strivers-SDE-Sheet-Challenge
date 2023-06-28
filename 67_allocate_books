@@ -1,0 +1,37 @@
+#include <bits/stdc++.h> 
+bool isPoss(int n, vector<int> arr, long long mid) {
+	int daycnt = 1;
+	long long time = 0;
+	for(int i=0; i<arr.size(); i++) {
+		if(time + arr[i] <= mid) {
+			time += arr[i];
+		}
+		else {
+			daycnt++;
+			if(daycnt > n || arr[i] > mid) return false;
+			else time = arr[i];
+		}
+	}
+	return true;
+}
+long long ayushGivesNinjatest(int n, int m, vector<int> time) {	
+	long long low = 0;
+	long long high = 0;
+	for(int i=0; i<time.size(); i++) {
+		high += time[i];
+		low = max(low, (long long) time[i]);
+	}
+
+	long long ans = 0;
+	while(low <= high) {
+		long long mid = (low + high) / 2;
+		if(isPoss(n, time, mid)) {
+			ans = mid;
+			high = mid - 1;
+		}
+		else {
+			low = mid + 1;
+		}
+	}
+	return ans;
+}
