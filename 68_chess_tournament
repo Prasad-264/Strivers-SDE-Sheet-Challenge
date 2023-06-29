@@ -1,0 +1,31 @@
+// Aggresive Cows
+
+#include <bits/stdc++.h> 
+bool isPoss(vector<int>& arr, int c, int mid) {
+	int allot = 1, player = arr[0];
+	for(int i=1; i<arr.size(); i++) {
+		if(arr[i] - player >= mid) {
+			allot++;
+			player = arr[i];
+		}
+		if(allot == c) return true;
+	}
+	return false;
+}
+
+int chessTournament(vector<int> positions , int n ,  int c){
+	sort(positions.begin(), positions.end());
+	int low = 1, high = positions[n-1] - positions[0];
+	int ans = -1;
+	while(low <= high) {
+		int mid = (low + high) / 2;
+		if(isPoss(positions, c, mid)) {
+			ans = mid; 
+			low = mid + 1;
+		}
+		else {
+			high = mid - 1;
+		}
+	}
+	return ans;
+}
