@@ -1,0 +1,93 @@
+// Implementation of a queue using array
+
+#include <bits/stdc++.h> 
+class Queue {
+public:
+    vector<int> arr;
+    int head;
+public:
+    Queue() {
+        head = 0;
+    }
+
+    /*----------------- Public Functions of Queue -----------------*/
+
+    bool isEmpty() {
+        return head >= arr.size();
+    }
+
+    void enqueue(int data) {
+        arr.push_back(data);
+    }
+
+    int dequeue() {
+        if(isEmpty()) return -1;
+
+        int temp = arr[head];
+        head++;
+        return temp;
+    }
+
+    int front() {
+        if(isEmpty()) return -1;
+        return arr[head];
+    }
+};
+
+// implementation using Linkedlist
+
+#include <bits/stdc++.h> 
+class Node {
+public:
+    Node* next;
+    int data;
+
+    Node(int data) {
+        this->data = data;
+        this->next = NULL;
+    }
+};
+
+class Queue {
+public:
+    Node* qfront;
+    Node* rear;
+public:
+    Queue() {
+        qfront = NULL;
+        rear = NULL;
+    }
+
+    /*----------------- Public Functions of Queue -----------------*/
+
+    bool isEmpty() {
+        return qfront == NULL;
+    }
+
+    void enqueue(int data) {
+        Node* newNode = new Node(data);
+        if(isEmpty()) {
+            qfront = newNode;
+            rear = newNode;
+        }
+        else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+    }
+
+    int dequeue() {
+        if(isEmpty()) return -1;
+
+        int ans = qfront->data;
+        Node* temp = qfront;
+        qfront = qfront->next;
+        delete temp;
+        return ans;
+    }
+
+    int front() {
+        if(isEmpty()) return -1;
+        return qfront->data;
+    }
+};
