@@ -1,0 +1,47 @@
+// Brute force
+
+#include <bits/stdc++.h> 
+vector<int> slidingWindowMaximum(vector<int> &nums, int &k) {
+    int n = nums.size();
+    vector<int> ans;
+    for(int i=0; i<=n-k; i++) {
+        int maxi = nums[i];
+        for(int j=1; j<k; j++) {
+            maxi = max(maxi, nums[i+j]);
+        }
+        ans.push_back(maxi);
+    }
+    return ans;
+}
+
+// Optimised Solution
+
+#include <bits/stdc++.h> 
+vector<int> slidingWindowMaximum(vector<int> &nums, int &k) {
+    int n = nums.size();
+    vector<int> ans;
+    priority_queue<pair<int, int> > heap;
+ 
+    // Initialize the heap with the first k elements
+    for (int i = 0; i < k; i++)
+        heap.push({ nums[i], i });
+ 
+    // The maximum element in the first window
+    ans.push_back(heap.top().first);
+ 
+    // Process the remaining elements
+    for (int i = k; i < n; i++) {
+ 
+        // Add the current element to the heap
+        heap.push({ nums[i], i });
+ 
+        // Remove elements that are outside the current
+        // window
+        while (heap.top().second <= i - k)
+            heap.pop();
+ 
+        // The maximum element in the current window
+        ans.push_back(heap.top().first);
+    }
+    return ans;
+}
