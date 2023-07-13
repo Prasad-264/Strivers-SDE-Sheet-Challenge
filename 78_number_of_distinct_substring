@@ -1,0 +1,55 @@
+// Brute force
+
+#include <bits/stdc++.h> 
+int distinctSubstring(string &word) {
+    int n = word.size();
+    unordered_set<string> st;
+    for(int i=0; i<n; i++) {
+        for(int j=i; j<n; j++) {
+            string temp = word.substr(i, j-i+1);
+            st.insert(temp);
+        }
+    }
+    return st.size();
+}
+
+// optimised - Using trie
+
+#include <bits/stdc++.h>
+
+class Node {
+public:
+    Node* links[26];
+
+    bool containsKey(char ch) {
+        return links[ch - 'a'] != NULL;
+    }
+
+    void put(char ch, Node* node) {
+        links[ch - 'a'] = node;
+    }
+
+    Node* get(char ch) {
+        return links[ch - 'a'];
+    }
+};
+
+int distinctSubstring(string &word) {
+    int n = word.size();
+    Node* root = new Node();
+
+    int cnt = 0;
+
+    for(int i=0; i<n; i++) {
+        Node* node = root;
+        for(int j=i; j<n; j++) {
+            if(!node->containsKey(word[j])) {
+                cnt++;
+                node->put(word[j], new Node());
+            }
+            node = node->get(word[j]);
+        }
+    }
+    return cnt;
+}
+
