@@ -1,0 +1,43 @@
+// Roman to interger
+
+int romanToInt(string s) {
+    int n = s.size();
+    unordered_map<char, int> mp = {
+        {'I', 1},
+        {'V', 5},
+        {'X', 10},
+        {'L', 50},
+        {'C', 100},
+        {'D', 500},
+        {'M', 1000}
+    };
+
+    int ans = 0;
+    for(int i=0; i<n; i++) {
+        if(mp[s[i]] < mp[s[i+1]]) {
+            ans -= mp[s[i]];
+        }
+        else {
+            ans += mp[s[i]];
+        }
+    }
+    return ans;
+}
+
+// Interger to roman
+
+class Solution {
+public:
+    string intToRoman(int num) {
+        int normal[] = {1000,900,500,400,100,90,50,40,10,9,5,4,1};
+        string roman[] = {"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
+        string res;
+        for(int i=0; i<13; i++) {
+            while(num >= normal[i]) {
+                res.append(roman[i]);
+                num -= normal[i];
+            }
+        }
+        return res;   
+    }
+};
