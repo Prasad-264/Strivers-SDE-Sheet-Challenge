@@ -1,0 +1,115 @@
+// using sorting
+#include<bits/stdc++.h>
+string longestCommonPrefix(vector<string> &arr, int n) {
+    sort(arr.begin(), arr.end());
+    string s1 = arr[0];
+    string s2 = arr[n-1];
+    int n1 = s1.size(), n2 = s2.size();
+    
+    int i=0;
+    while(i < min(n1, n2)) {
+        if(s1[i] == s2[i]) {
+            i++;
+        }
+    }
+    return s1.substr(0, i);
+}
+
+
+
+// using .find() string functiom O(n*m)
+
+#include<bits/stdc++.h>
+string longestCommonPrefix(vector<string> &arr, int n) {
+    string s = arr[0];
+    int len = s.size();
+    for(int i=1; i<n; i++) {
+        string str = arr[i];
+        while(str.find(s) != 0) {
+            s = s.substr(0, len-1);
+            len--;
+
+            if(s.empty()) return "";
+        }
+    }
+    return s;
+}
+
+// Trie Solution
+
+#include<bits/stdc++.h>
+
+struct Node {
+    Node* links[26];
+    bool flag = false;
+    int cnt = 0;
+
+    bool containsKey(char ch) {
+        return links[ch - 'a'] != NULL;
+    }
+
+    void put(char ch, Node* node) {
+        links[ch - 'a'] = node;
+    }
+
+    Node* get(char ch) {
+        return links[ch - 'a'];
+    }
+
+    void setEnd() {
+        flag = true;
+    }
+
+    bool isEnd() {
+        return flag;
+    }
+};
+
+class Trie {
+private:
+    Node* root;
+public:
+    Trie() {
+        root = new Node();
+    }
+
+    void insert(string& word) {
+        Node* node = root;
+        for(int i=0; i<word.size(); i++) {
+            if(!node->containsKey(word[i])) {
+                node->put(word[i], new Node());
+                node->cnt++;
+            }
+            node = node->get(word[i]);
+        }
+        node->setEnd();
+    }
+
+    void prefix(string& word, string& ans) {
+        Node* node = root;
+        for(int i=0; i<word.size(); i++) {
+            if(node->cnt == 1) {
+                ans.push_back(word[i]);
+                node = node->get(word[i]);
+            }
+            else break;
+
+            if(node->isEnd()) break;
+        }
+    }
+};
+
+string longestCommonPrefix(vector<string> &arr, int n) {
+    Trie trie;
+    for(auto it : arr) {
+        trie.insert(it);
+    }
+    string ans = "";
+    trie.prefix(arr[0], ans);
+
+    return ans;
+}
+
+
+
+
