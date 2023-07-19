@@ -1,0 +1,33 @@
+#include <bits/stdc++.h> 
+
+string build(string num) {
+	int freq = 1;
+	char curnum = num[0];
+	string ans = "";
+	for(int i=1; i<num.size(); i++) {
+		if(num[i] == curnum) {
+			freq++;
+		}
+		else {
+			char f = (char) ('0' + freq);
+			ans.push_back(f);
+			ans.push_back(curnum);
+
+			curnum = num[i];
+			freq = 1;
+		}
+	}
+	char f = (char) ('0' + freq);
+	ans.push_back(f);
+	ans.push_back(curnum);
+
+	return ans;
+}
+
+string writeAsYouSpeak(int n) {
+	string s = "1";
+	for(int i=0; i<n-1; i++) {
+		s = build(s);
+	}
+	return s;
+}
