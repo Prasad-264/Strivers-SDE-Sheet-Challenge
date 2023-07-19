@@ -1,0 +1,87 @@
+// naive way of Z Algorithm
+
+int zAlgorithm(string s, string pat, int n, int m) {
+    string total = pat + "$" + s;
+
+    vector<int> z;
+    int i=0;
+    while(i < total.size()) {
+        if(i <= m) z.push_back(0);
+        else {
+            int left = 0, right = 0;
+            if(total[left] == total[i]) {
+                right = i;
+                while(right < total.size() && total[left] == total[right]) {
+                    left++;
+                    right++;
+                }
+            }
+            z.push_back(left);
+        }
+        i++;
+    }
+
+    // vector<int> ans;
+    int cnt = 0;
+    for(int i=0; i<total.size(); i++) {
+        if(z[i] == m) {
+            // ans.push_back(i-m);
+            cnt++;
+        }
+    }
+    //return ans.size();
+    return cnt;
+}
+
+
+
+
+// Optimize way of Z Algorithm
+
+vector<int> zarray(string s) {
+    int n = s.length();
+    int l = 0, r = 0;
+
+    vector<int> z(n, 0);
+    for(int i=1; i<n; i++) {
+        if(i > r) {
+            l = r = i;
+            while(r < n && s[r] == s[r - l])
+                r++;
+
+            z[i] = (r - l);
+            r--;
+        }
+        else {
+            int idx = (i - l);
+            if(i + z[idx] <= r) {
+                z[i] = z[idx];
+            }
+            else {
+                l = i;
+                while(r < n && s[r] == s[r - l])
+                    r++;
+
+                z[i] = (r - l);
+                r--;
+            }
+        }
+    }
+    return z;   
+}
+
+int zAlgorithm(string s, string pat, int n, int m) {
+    // Write your code here
+    string total = pat + "$" + s;
+    vector<int> z = zarray(total);
+
+    vector<int> ans;
+
+    for(int i= 0; i<z.size(); i++) {
+        if(z[i] == m) {
+            ans.push_back(i-m-1);
+        }
+    }
+
+    return (int)ans.size();
+}
