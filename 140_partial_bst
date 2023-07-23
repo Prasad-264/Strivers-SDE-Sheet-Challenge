@@ -1,0 +1,34 @@
+#include <bits/stdc++.h> 
+/*************************************************************
+ 
+    Following is the Binary Tree node structure
+
+    class BinaryTreeNode 
+    {
+    public : 
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+*************************************************************/
+
+bool isBST(BinaryTreeNode<int> *root, int lowerbound, int upperbound) {
+    if(root == NULL) return true;
+    if(root->data <= lowerbound || root->data >= upperbound) return false;
+
+    bool lt = isBST(root->left, lowerbound, root->data);
+    bool rt = isBST(root->right, root->data, upperbound);
+
+    return lt && rt;
+}
+
+bool validateBST(BinaryTreeNode<int> *root) { 
+    return isBST(root, INT_MIN, INT_MAX);
+}
