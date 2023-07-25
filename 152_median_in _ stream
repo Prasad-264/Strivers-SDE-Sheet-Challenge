@@ -1,0 +1,73 @@
+// Brute Force Approach
+
+#include <bits/stdc++.h>
+
+int findMid(vector<int>& nums) {
+	sort(nums.begin(), nums.end());
+	int n = nums.size();
+	if(n % 2 == 0) {
+		return (nums[n/2] + nums[n/2 - 1]) / 2;
+	}
+	return nums[n/2];
+}
+
+vector<int> findMedian(vector<int> &arr, int n) {
+	vector<int> ans;
+	vector<int> nums;
+	for(int i=0; i<n; i++) {
+		nums.push_back(arr[i]);
+		int mid = findMid(nums);
+		ans.push_back(mid);
+	}
+	return ans;
+}
+
+
+// Optimised Approach
+
+#include <bits/stdc++.h>
+
+vector<int> findMedian(vector<int> &arr, int n) {
+	vector<int> ans;
+	priority_queue<int> maxHeap;
+	priority_queue<int, vector<int>, greater<int>> minHeap;
+	for(auto it : arr) {
+
+		// push the element in proper queue
+		// if element is < maxHeap.top() 
+		// then push it in maxHeap
+		// else push it in minHeap
+		if(maxHeap.empty() || maxHeap.top() > it) {
+			maxHeap.push(it);
+		}
+		else {
+			minHeap.push(it);
+		}
+
+		// maintain the size of the both queues
+		// maxHeap will always contains 1 element 
+		// more the minHeap
+		if(maxHeap.size() > minHeap.size()+1) {
+			minHeap.push(maxHeap.top());
+			maxHeap.pop();
+		}
+		else if(maxHeap.size() < minHeap.size()) {
+			maxHeap.push(minHeap.top());
+			minHeap.pop();
+		}
+
+		// if both queue size is same then 
+		// sum of top of both queue / 2 
+		// will be the median
+		// else maxHeap.top() will be median
+		if(minHeap.size() == maxHeap.size()) {
+			int mid = (maxHeap.top() + minHeap.top()) / 2;
+			ans.push_back(mid);
+		}
+		else{
+			int mid = maxHeap.top();
+			ans.push_back(mid);
+		}
+	}
+	return ans;
+}
