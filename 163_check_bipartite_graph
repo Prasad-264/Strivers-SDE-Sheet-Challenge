@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+
+// odd length cycle - not bipartite
+// even length cycle - Bipatite
+// linear graph(acyclic graph) - Bipartite
+
+// BFS Solution
+
+bool bfs(int start, vector<int>& col, vector<int> adj[]) {
+	queue<int> q;
+	q.push(start);
+	col[start] = 0;
+	while(!q.empty()) {
+		int node = q.front();
+		q.pop();
+
+		for(auto it : adj[node]) {
+			if(col[it] == -1) {
+				col[it] = !col[node];
+				q.push(it);
+			}
+			else if(col[it] == col[node]) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+bool isGraphBirpatite(vector<vector<int>> &edges) {
+	int v = edges.size();
+	vector<int> adj[v];
+	for(int i=0; i<v; i++) {
+		for(int j=0; j<v; j++) {
+			if(edges[i][j] == 1) {
+				adj[i].push_back(j);
+				adj[j].push_back(i);
+			}
+		}
+	}
+
+	vector<int> col(v, -1);
+	for(int i=0; i<v; i++) {
+		if(col[i] == -1) {
+			if(bfs(i, col, adj) == false) return false;
+		}
+	}
+	return true;
+}
+
+// DFS Solution
+
+bool dfs(int node, int col, vector<int>& color, vector<int> adj[]) {
+	color[node] = col;
+	for(auto it : adj[node]) {
+		if(color[it] == -1) {
+			if(dfs(it, !col, color, adj) == false) return false;
+		}
+		else if(color[it] == col) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool isGraphBirpatite(vector<vector<int>> &edges) {
+	int v = edges.size();
+	vector<int> adj[v];
+	for(int i=0; i<v; i++) {
+		for(int j=0; j<v; j++) {
+			if(edges[i][j] == 1) {
+				adj[i].push_back(j);
+				adj[j].push_back(i);
+			}
+		}
+	}
+	int col = 0;
+	vector<int> color(v, -1);
+	for(int i=0; i<v; i++) {
+		if(color[i] == -1) {
+			if(dfs(i, col, color, adj) == false) return false;
+		}
+	}
+	return true;
+}
