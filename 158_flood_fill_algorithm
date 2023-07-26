@@ -1,0 +1,69 @@
+
+// DFS Solution
+
+vector<int> dir = {-1, 0, 1, 0, -1};
+
+void dfs(int row, int col, vector<vector<int>>& grid, int iniCol, int newColor) {
+    grid[row][col] = newColor;
+    // vis[row][col] = 1;
+    int n = grid.size();
+    int m = grid[0].size();
+    for(int i=0; i<4; i++) {
+        int nrow = row + dir[i]; 
+        int ncol = col + dir[i+1]; 
+
+        if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && 
+            grid[nrow][ncol] == iniCol && grid[nrow][ncol] != newColor) {
+            dfs(nrow, ncol, grid, iniCol, newColor);
+        }
+    }
+}
+
+vector<vector<int>> floodFill(vector<vector<int>> &image, int x, int y, int newColor) {
+    vector<vector<int>> grid = image;
+    int n = grid.size();
+    int m = grid[0].size();
+    // vector<vector<int>> vis(n, vector<int> (m, 0));
+    int iniCol = grid[x][y];
+    dfs(x, y, grid, iniCol, newColor);
+    return grid;
+}
+
+
+// BFS Solution
+
+#include<bits/stdc++.h>
+
+vector<int> dir = {-1, 0, 1, 0, -1};
+
+vector<vector<int>> floodFill(vector<vector<int>> &image, int x, int y, int newColor) {
+    vector<vector<int>> grid = image;
+    int n = grid.size();
+    int m = grid[0].size();
+    int iniCol = grid[x][y];
+    
+    queue<pair<int, int>> q;
+    q.push({x, y});
+    while(!q.empty()) {
+        auto it = q.front();
+        q.pop();
+
+        int row = it.first;
+        int col = it.second;
+
+        grid[row][col] = newColor;
+
+        for(int i=0; i<4; i++) {
+            int nrow = row + dir[i]; 
+            int ncol = col + dir[i+1]; 
+
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && 
+            grid[nrow][ncol] == iniCol && grid[nrow][ncol] != newColor) {
+
+                q.push({nrow, ncol});
+            }
+        }
+    }
+
+    return grid;
+}
