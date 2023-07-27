@@ -30,3 +30,5 @@ int bellmonFord(int n, int m, int src, int dest, vector<vector<int>> &edges) {
     
     return dist[dest];
 }
+
+// TC - O(N * E)
