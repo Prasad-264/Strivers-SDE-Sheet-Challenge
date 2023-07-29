@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "172_longest_common_subsequence": "cpp"
+        "172_longest_common_subsequence": "cpp",
+        "174_01_knapsack": "cpp"
     }
 }

@@ -1,0 +1,116 @@
+// Recursion
+
+#include <bits/stdc++.h>
+
+int fun(int ind, int w, vector<int> &values, vector<int> &weights) {
+	if(ind == 0) {
+		if(weights[0] <= w) return values[0];
+		else return 0;
+	}
+
+	// not pick;
+	int notPick = fun(ind-1, w, values, weights);
+	int pick = INT_MIN;
+	if(weights[ind] <= w) {
+		pick = values[ind] + fun(ind-1, w-weights[ind], values, weights);
+	}
+	return max(notPick, pick);
+}
+
+int maxProfit(vector<int> &values, vector<int> &weights, int n, int w) {
+	return fun(n-1, w, values, weights);
+}
+
+
+// Memoization
+
+#include <bits/stdc++.h>
+int fun(int ind, int w, vector<int> &values, vector<int> &weights, vector<vector<int>> &dp) {
+	if(ind == 0) {
+		if(weights[0] <= w) return values[0];
+		else return 0;
+	}
+
+	if(dp[ind][w] != -1) return dp[ind][w];
+
+	// not pick;
+	int notPick = fun(ind-1, w, values, weights, dp);
+	int pick = INT_MIN;
+	if(weights[ind] <= w) {
+		pick = values[ind] + fun(ind-1, w-weights[ind], values, weights, dp);
+	}
+	return dp[ind][w] = max(notPick, pick);
+}
+int maxProfit(vector<int> &values, vector<int> &weights, int n, int w) {
+	vector<vector<int>> dp(n, vector<int> (w+1, -1));
+	return fun(n-1, w, values, weights, dp);
+}
+
+// Tabulation
+
+int maxProfit(vector<int> &values, vector<int> &weights, int n, int w) {
+	vector<vector<int>> dp(n, vector<int> (w+1, 0));
+	// Base Case
+	for(int i=weights[0]; i<=w; i++) dp[0][i] = values[0]; 
+
+	for(int ind = 1; ind<n; ind++) {
+		for(int wt=0; wt<=w; wt++) {
+			int notPick = dp[ind-1][wt];
+			int pick = INT_MIN;
+			if(weights[ind] <= wt) {
+				pick = values[ind] + dp[ind-1][wt-weights[ind]];
+			}
+
+			dp[ind][wt] = max(notPick, pick);
+		}
+	}
+	return dp[n-1][w];
+}
+
+
+// Space Optimization - O(2N)
+
+int maxProfit(vector<int> &values, vector<int> &weights, int n, int w) {
+	vector<int> prev(w+1, 0), cur(w+1, 0);
+	// Base Case
+	for(int i=weights[0]; i<=w; i++) prev[i] = values[0]; 
+
+	for(int ind = 1; ind<n; ind++) {
+		for(int wt=0; wt<=w; wt++) {
+			int notPick = prev[wt];
+			int pick = INT_MIN;
+			if(weights[ind] <= wt) {
+				pick = values[ind] + prev[wt-weights[ind]];
+			}
+
+			cur[wt] = max(notPick, pick);
+		}
+		prev = cur;
+	}
+	return prev[w];
+}
+
+
+
+// Space Optimization - O(n)
+#include <bits/stdc++.h>
+
+
+int maxProfit(vector<int> &values, vector<int> &weights, int n, int w) {
+	vector<int> prev(w+1, 0);
+	// Base Case
+	for(int i=weights[0]; i<=w; i++) prev[i] = values[0]; 
+
+	for(int ind = 1; ind<n; ind++) {
+		for(int wt=w; wt>=0; wt--) {
+			int notPick = prev[wt];
+			int pick = INT_MIN;
+			if(weights[ind] <= wt) {
+				pick = values[ind] + prev[wt-weights[ind]];
+			}
+
+			prev[wt] = max(notPick, pick);
+		}
+	}
+	return prev[w];
+}
