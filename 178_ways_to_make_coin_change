@@ -1,0 +1,15 @@
+#include<bits/stdc++.h>
+long solve(int ind, int *deno, int n, int value, vector<vector<long>> &dp) {
+    if(ind == n) {
+        if(value == 0) return 1;
+        else return 0;
+    }
+    if(value < 0) return 0;
+    if(dp[ind][value] != -1) return dp[ind][value];
+    return dp[ind][value] = long (solve(ind, deno, n, value-deno[ind], dp) + solve(ind+1, deno, n, value, dp));
+}
+
+long countWaysToMakeChange(int *deno, int n, int value) {
+    vector<vector<long>> dp(n,vector<long>(value+1,-1));
+    return solve(0, deno, n, value, dp);
+}
