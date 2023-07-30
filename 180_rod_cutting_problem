@@ -12,9 +12,7 @@ int cut(vector<int>& price,int ind,int n,vector<vector<int>>& dp){
 	return dp[ind][n]=max(pick,notpick);
 }
 
-int cutRod(vector<int> &price, int n)
-{
-	// Write your code here.
+int cutRod(vector<int> &price, int n) {
 	vector<vector<int>> dp(n,vector<int>(n+1,-1));
 	return cut(price,n-1,n,dp);
 }
