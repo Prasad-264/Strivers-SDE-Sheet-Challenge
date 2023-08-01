@@ -1,18 +1,22 @@
-int cut(vector<int>& price,int ind,int n,vector<vector<int>>& dp){
-	if(ind==0){
-		return n*price[0];
+
+// Memoization
+
+int fun(int ind, int n, vector<int> &price, vector<vector<int>> &dp) {
+	if(ind == 0) {
+		return n * price[0];
 	}
-	if(dp[ind][n]!=-1) return dp[ind][n];
-	int notpick=cut(price,ind-1,n,dp);
-	int pick=INT_MIN;
-	int rl=ind+1;
-	if(rl<=n){
-		pick=price[ind]+cut(price,ind,n-rl,dp);
-	}
-	return dp[ind][n]=max(pick,notpick);
+	if(dp[ind][n] != -1) return dp[ind][n];
+
+	int notTake = fun(ind-1, n, price, dp);
+	int take = INT_MIN;
+	int rodlength = ind + 1;
+	if(rodlength <= n) take = price[ind] + fun(ind, n-rodlength, price, dp);
+
+	return dp[ind][n] = max(take, notTake);
 }
 
 int cutRod(vector<int> &price, int n) {
-	vector<vector<int>> dp(n,vector<int>(n+1,-1));
-	return cut(price,n-1,n,dp);
+	vector<vector<int>> dp(n, vector<int> (n+1, -1));
+	return fun(n-1, n, price, dp);
 }
+

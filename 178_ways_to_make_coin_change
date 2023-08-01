@@ -1,15 +1,64 @@
-#include<bits/stdc++.h>
-long solve(int ind, int *deno, int n, int value, vector<vector<long>> &dp) {
-    if(ind == n) {
-        if(value == 0) return 1;
-        else return 0;
+
+// Recursion
+
+long fun(int ind, int value, int *deno) {
+    if(ind == 0) {
+        return (value % deno[0] == 0);
     }
-    if(value < 0) return 0;
-    if(dp[ind][value] != -1) return dp[ind][value];
-    return dp[ind][value] = long (solve(ind, deno, n, value-deno[ind], dp) + solve(ind+1, deno, n, value, dp));
+
+    long notTake = fun(ind-1, value, deno);
+
+    long take = 0;
+    if(deno[ind] <= value) take = fun(ind, value-deno[ind], deno);
+
+    return take + notTake;
 }
 
 long countWaysToMakeChange(int *deno, int n, int value) {
-    vector<vector<long>> dp(n,vector<long>(value+1,-1));
-    return solve(0, deno, n, value, dp);
+    return fun(n-1, value, deno);
 }
+
+// Memoization
+
+#include <bits/stdc++.h>
+long fun(int ind, int value, int *deno, vector<vector<long>> &dp) {
+    if(ind == 0) {
+        return (value % deno[0] == 0);
+    }
+    if(dp[ind][value] != -1) return dp[ind][value];
+
+    long notTake = fun(ind-1, value, deno, dp);
+
+    long take = 0;
+    if(deno[ind] <= value) take = fun(ind, value-deno[ind], deno, dp);
+
+    return dp[ind][value] = take + notTake;
+}
+
+long countWaysToMakeChange(int *deno, int n, int value) {
+    vector<vector<long>> dp(n, vector<long> (value+1, -1));
+    return fun(n-1, value, deno, dp);
+}
+
+
+// Tabulation
+
+#include <bits/stdc++.h>
+long countWaysToMakeChange(int *num, int n, int target) {
+    vector<vector<long>> dp(n,vector<long>(target+1,0));
+    for(int t=0; t<=target; t++) {
+       dp[0][t] = (t%num[0]==0);
+    }
+    for(int i=1; i<n; i++) {
+        for(int t=0; t<=target; t++) {
+            long not_take = dp[i-1][t];
+            long take = 0;
+            if(num[i] <= t) {
+                take = dp[i][t-num[i]];
+            }
+            dp[i][t] = take+not_take;
+        }
+    }    
+    return dp[n-1][target];
+}
+

@@ -1,36 +1,103 @@
-#include<bits/stdc++.h>
-bool isPalindrome(int i,int j,string a)
-{
-    while(i<j)
-    {
-        if(a[i]!=a[j])
+// Recursion
+
+
+bool isPalin(string& s) {
+    int i=0, j=s.size()-1;
+    while(i <= j) {
+        if(s[i++] != s[j--]) {
             return false;
-        i++;
-        j--;
+        }
     }
     return true;
 }
-int f(int i,int n,string&a,vector<int>&dp)
-{
-    if(i==n)
-        return 0;
-    
-    if(dp[i]!=-1)
-        return dp[i];
-    int mincost=INT_MAX;
-    for(int j=i;j<n;j++)
-    {
-        if(isPalindrome(i,j,a))
-        {
-            int cost = 1+f(j+1,n,a,dp);
-            mincost=min(cost,mincost);
-        }        
+
+int fun(int ind, int n, string& str) {
+    if(ind == n) return 0;
+    int mini = INT_MAX;
+    string temp = "";
+    for(int i=ind; i<n; i++) {
+        temp += str[i];
+        if(isPalin(temp)) {
+            int cost = 1 + fun(i+1, n, str);
+            mini = min(mini, cost);
+        }
     }
-    return dp[i]=mincost;
+    return mini;
 }
+
 int palindromePartitioning(string str) {
-    // Write your code here
-    int n=str.length();
-    vector<int> dp(n,-1);
-    return f(0,n,str,dp)-1;
+    int n = str.size();
+    return fun(0, n, str)-1;
+}
+
+
+// Memoization
+
+
+bool isPalin(string& s) {
+    int i=0, j=s.size()-1;
+    while(i <= j) {
+        if(s[i++] != s[j--]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int fun(int ind, int n, string& str, vector<int> &dp) {
+    if(ind == n) return 0;
+    if(dp[ind] != -1) return dp[ind];
+    int mini = INT_MAX;
+    string temp = "";
+    for(int i=ind; i<n; i++) {
+        temp += str[i];
+        if(isPalin(temp)) {
+            int cost = 1 + fun(i+1, n, str, dp);
+            mini = min(mini, cost);
+        }
+    }
+    return dp[ind] = mini;
+}
+
+int palindromePartitioning(string str) {
+    int n = str.size();
+    vector<int> dp(n, -1);
+    return fun(0, n, str, dp)-1;
+}
+
+
+// Tabulation
+
+
+bool isPalin(string& s) {
+    int i=0, j=s.size()-1;
+    while(i <= j) {
+        if(s[i++] != s[j--]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int palindromePartitioning(string str) {
+    int n = str.size();
+    vector<int> dp(n+1, 0);
+
+    // base case
+    dp[n] = 0;
+
+    for(int ind=n-1; ind>=0; ind--) {
+        int mini = INT_MAX;
+        string temp = "";
+        for(int i=ind; i<n; i++) {
+            temp += str[i];
+            if(isPalin(temp)) {
+                int cost = 1 + dp[i+1];
+                mini = min(mini, cost);
+            }
+        }
+        dp[ind] = mini;
+    }
+
+    return dp[0]-1;
 }
